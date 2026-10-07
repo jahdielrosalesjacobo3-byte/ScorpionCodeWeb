@@ -6,3 +6,6 @@ coverage/
 *.log
 .env*
 !.env.example
+.vercel-deploy-*.json
+.vercel-mp4.b64
+.vercel
