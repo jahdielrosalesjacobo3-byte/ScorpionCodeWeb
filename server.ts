@@ -1,8 +1,12 @@
+import dotenv from "dotenv";
 import express from "express";
 import path from "path";
 import { createServer as createViteServer } from "vite";
 import { generateQuoteBlueprint } from "./lib/handlers/quote";
 import { generateChatReply, type ChatMessage } from "./lib/handlers/chat";
+
+dotenv.config({ path: ".env.local" });
+dotenv.config();
 
 const PORT = 3000;
 

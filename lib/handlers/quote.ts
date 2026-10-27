@@ -1,5 +1,6 @@
 import { Type } from "@google/genai";
 import { getAIInstance } from "../gemini";
+import { callNvidiaChatCompletion } from "../nvidia";
 
 export type QuoteRequestBody = {
   description?: string;
@@ -10,7 +11,6 @@ export type QuoteRequestBody = {
 
 export async function generateQuoteBlueprint(body: QuoteRequestBody) {
   const { description, budgetRange, timeline, complexity } = body;
-  const ai = getAIInstance();
 
   const prompt = `
         You are the Head of Cybernetic Architecture at SCORPION CODE, an elite software engineering agency.
@@ -26,6 +26,29 @@ export async function generateQuoteBlueprint(body: QuoteRequestBody) {
         Generate the technical architecture, recommended technology stack, estimated engineering hours, proposed pricing, phases, and an advanced security advice.
         Return your answer as a JSON object matching the requested schema.
       `;
+
+  if (process.env.NVIDIA_API_KEY && !process.env.GEMINI_API_KEY) {
+    const rawJson = await callNvidiaChatCompletion({
+      messages: [
+        {
+          role: "system",
+          content:
+            'You are the automated Scorpion Code blueprint generator. Return ONLY a valid JSON object in Spanish with keys: "projectName" (string), "recommendedStack" (array of 4-6 strings), "architectureOverview" (string, 2-3 sentences), "estimatedHours" (integer), "estimatedCostRange" (string in USD), "deliverables" (array of 3 milestone strings), "scorpionTacticalAdvice" (string). Do not wrap in markdown code fences.',
+        },
+        { role: "user", content: prompt.trim() },
+      ],
+      temperature: 0.6,
+      maxTokens: 900,
+      responseFormat: { type: "json_object" },
+    });
+    const cleaned = rawJson
+      .replace(/^```(?:json)?\s*/i, "")
+      .replace(/\s*```$/, "")
+      .trim();
+    return JSON.parse(cleaned);
+  }
+
+  const ai = getAIInstance();
 
   const response = await ai.models.generateContent({
     model: "gemini-3.5-flash",

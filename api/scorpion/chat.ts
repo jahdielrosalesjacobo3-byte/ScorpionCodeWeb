@@ -16,7 +16,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     const message =
       error instanceof Error
         ? error.message
-        : "Verify your GEMINI_API_KEY in the Secrets panel.";
+        : "Verify your NVIDIA_API_KEY in environment variables.";
     return res.status(500).json({
       error: "Failed to link to Scorpion neural core.",
       message,

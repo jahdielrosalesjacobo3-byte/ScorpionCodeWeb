@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import { 
   FileText, Zap, Shield, Calendar, DollarSign, Clock, Cpu, 
-  HelpCircle, AlertTriangle, ArrowRight, Download, CheckCircle, RefreshCcw 
+  HelpCircle, AlertTriangle, ArrowRight, Download, CheckCircle, RefreshCcw, Mail 
 } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
+import { buildGmailComposeUrl, buildWhatsAppUrl } from "../data/servicesCatalog";
 
 interface EstimatorResult {
   projectName: string;
@@ -269,16 +270,31 @@ export default function QuoteEstimator() {
                   Volver a calcular
                 </button>
                 <a
-                  href={`https://wa.me/525610142522?text=${encodeURIComponent(`Hola Scorpion Code, coticé el proyecto "${estimateResult?.projectName || "Software"}" con inversión estimada ${estimateResult?.estimatedCostRange || "a medida"}. Deseo agendar una llamada técnica.`)}`}
+                  href={buildWhatsAppUrl(
+                    `Hola equipo de *Scorpion Code*, generé el blueprint *"${estimateResult?.projectName || "Proyecto"}"* en su Cotizador AI y deseo solicitar una cotización formal.\n\n• *Complejidad:* ${complexity}\n• *Plazo deseado:* ${timeline}\n• *Esfuerzo estimado:* ${estimateResult?.estimatedHours || 0} hrs\n• *Stack recomendado:* ${(estimateResult?.recommendedStack || []).join(", ")}\n\n*Descripción de mi requerimiento:*\n${description}\n\n¿Podemos agendar una llamada técnica?`
+                  )}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="px-3.5 py-1.5 bg-emerald-500 hover:bg-emerald-400 text-black font-bold text-xs rounded-lg flex items-center gap-1.5 transition-colors cursor-pointer shadow-[0_2px_8px_rgba(16,185,129,0.3)]"
-                  title="Enviar blueprint a WhatsApp"
+                  title="Enviar blueprint personalizado por WhatsApp"
                 >
                   <svg viewBox="0 0 24 24" className="w-3.5 h-3.5 fill-current">
                     <path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91C2.13 13.66 2.59 15.36 3.45 16.86L2.05 22L7.3 20.62C8.75 21.41 10.38 21.83 12.04 21.83C17.5 21.83 21.95 17.38 21.95 11.92C21.95 9.27 20.92 6.78 19.05 4.91C17.18 3.03 14.69 2 12.04 2M12.05 3.67C14.25 3.67 16.31 4.53 17.87 6.09C19.42 7.65 20.28 9.72 20.28 11.92C20.28 16.46 16.58 20.15 12.04 20.15C10.56 20.15 9.11 19.76 7.85 19.02L7.55 18.84L4.44 19.65L5.27 16.62L5.07 16.3C4.26 15 3.81 13.48 3.81 11.91C3.81 7.37 7.5 3.67 12.05 3.67M9.23 7.35C9.04 7.35 8.74 7.42 8.49 7.69C8.24 7.96 7.54 8.62 7.54 9.96C7.54 11.3 8.52 12.6 8.65 12.78C8.79 12.96 10.58 15.72 13.32 16.9C15.6 17.88 16.07 17.68 16.56 17.63C17.06 17.59 18.16 16.98 18.39 16.33C18.62 15.68 18.62 15.13 18.55 15.01C18.48 14.89 18.29 14.82 18.01 14.68C17.74 14.54 16.38 13.87 16.13 13.78C15.87 13.68 15.69 13.64 15.5 13.91C15.32 14.19 14.79 14.82 14.63 15.01C14.47 15.19 14.31 15.22 14.04 15.08C13.76 14.94 12.88 14.65 11.83 13.72C11.02 12.99 10.47 12.09 10.31 11.82C10.15 11.54 10.29 11.39 10.43 11.25C10.56 11.12 10.72 10.91 10.86 10.75C11 10.59 11.05 10.47 11.14 10.29C11.23 10.1 11.19 9.94 11.12 9.8C11.05 9.66 10.5 8.32 10.27 7.76C10.05 7.23 9.82 7.3 9.65 7.29C9.5 7.29 9.32 7.29 9.23 7.35Z" />
                   </svg>
                   WhatsApp
+                </a>
+                <a
+                  href={buildGmailComposeUrl(
+                    `[Blueprint AI] Solicitud de Cotización — ${estimateResult?.projectName || "Proyecto Scorpion Code"}`,
+                    `Estimado equipo de Ingeniería de Scorpion Code,\n\nHe generado el siguiente blueprint técnico en su Calculadora Neurológica de Alcance y deseo solicitar una cotización formal:\n\n• Proyecto: ${estimateResult?.projectName}\n• Complejidad seleccionada: ${complexity}\n• Plazo estimado: ${timeline}\n• Horas de ingeniería estimadas: ${estimateResult?.estimatedHours} hrs\n• Stack recomendado: ${(estimateResult?.recommendedStack || []).join(", ")}\n\nDESCRIPCIÓN DEL REQUERIMIENTO:\n${description}\n\nARQUITECTURA SUGERIDA:\n${estimateResult?.architectureOverview}\n\nHITOS ESTRUCTURADOS:\n${(estimateResult?.deliverables || []).map((d) => `- ${d}`).join("\n")}\n\nDATOS DE CONTACTO:\n• Nombre / Empresa: \n• Teléfono / WhatsApp: \n\nQuedo atento para agendar una reunión técnica.\n\nSaludos cordiales.`
+                  )}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="px-3.5 py-1.5 bg-amber-500/20 hover:bg-amber-500/30 border border-amber-500/40 text-amber-300 font-bold text-xs rounded-lg flex items-center gap-1.5 transition-colors cursor-pointer"
+                  title="Enviar blueprint personalizado por Correo Electrónico"
+                >
+                  <Mail className="w-3.5 h-3.5 text-amber-400" />
+                  Correo
                 </a>
                 <button
                   onClick={() => setDownloaded(true)}
