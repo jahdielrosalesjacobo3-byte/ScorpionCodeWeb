@@ -1,6 +1,6 @@
 import { Type } from "@google/genai";
-import { getAIInstance } from "../gemini";
-import { callNvidiaChatCompletion } from "../nvidia";
+import { getAIInstance } from "../gemini.js";
+import { callNvidiaChatCompletion } from "../nvidia.js";
 
 export type QuoteRequestBody = {
   description?: string;

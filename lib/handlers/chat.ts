@@ -1,9 +1,9 @@
-import { callNvidiaChatCompletion, type NvidiaChatMessage } from "../nvidia";
-import { getAIInstance } from "../gemini";
+import { callNvidiaChatCompletion, type NvidiaChatMessage } from "../nvidia.js";
+import { getAIInstance } from "../gemini.js";
 import {
   buildCatalogPromptSummary,
   SCORPION_CONTACT,
-} from "../../src/data/servicesCatalog";
+} from "../../src/data/servicesCatalog.js";
 
 export type ChatMessage = {
   role: string;
